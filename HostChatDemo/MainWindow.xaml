@@ -1,0 +1,77 @@
+﻿<Window x:Class="HostChatDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HostChatDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="选项">
+                <MenuItem Header="打开房间列表" Click="OpenRoomListClick"/>
+                <MenuItem Header="退出房间" Command="{Binding ExitCurRoomCmd}"/>
+                <MenuItem Header="更改用户名" Command="{Binding RenameCmd}"/>
+                <MenuItem Header="退出" Click="ExitClick"/>
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom" Height="20">
+            <StatusBar.Items>
+                <StatusBarItem Content="{Binding Status}"/>
+            </StatusBar.Items>
+        </StatusBar>
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox Margin="5" ItemsSource="{Binding ChatRecords}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding SendDateTimeStr,StringFormat=时间:{0}}" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding UserName,StringFormat=用户名:{0}}" Margin="0,0,10,0"/>
+                            <TextBlock Text="{Binding Content,StringFormat=内容:{0}}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Online User:" Margin="5,5,0,0" />
+                <ListBox Grid.Row="1" Margin="5" ItemsSource="{Binding ChatUserInfos}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding UserName}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Margin="5" FontSize="20" Text="{Binding Content,UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding SendContentCmd}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+                <Button Grid.Column="1" Margin="5" Content="发送" Command="{Binding SendContentCmd}"/>
+
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>
